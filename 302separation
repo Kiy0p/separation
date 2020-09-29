@@ -3,8 +3,7 @@
 import sys
 import os
 
-def printUsage():
-    print("USAGE...")
+import tools
 
 def findNameInList(friendsList, name):
     for i in range(len(friendsList)):
@@ -15,30 +14,50 @@ def findNameInList(friendsList, name):
 def storeFileContent(fd):
     friendsList = []
     fd = map(lambda s: s.strip(), fd)
-    for line in fd:
-        name1 = line[:line.index(" is friends with ")]
-        name2 = line[line.index(" is friends with ") + 17:]
-        if findNameInList(friendsList, name1) == -1: #if name1 isn't in list, adds it and then adds name2 to it (as a friend).
-            friendsList.append([name1])
-            friendsList[findNameInList(friendsList, name1)].append(name2)
-        else: #if name1 is in the list, simply adds name2 to it.
-            friendsList[findNameInList(friendsList, name1)].append(name2)
-        if findNameInList(friendsList, name2) == -1: #if name1 isn't in the list, adds it and adds the name2 to it (as a friend).
-            friendsList.append([name2])
-            friendsList[findNameInList(friendsList, name2)].append(name1)
-        else: #if name2 is in the list, simply adds name1 to it.
-            friendsList[findNameInList(friendsList, name2)].append(name1)
+    for line in fd: # purpose of the loop : Kyle is friend with Tom -> [[Kyle, Tom], [Tom, Kyle]...]
+        hisName = line[:line.index(" is friends with ")]
+        hisFriend = line[line.index(" is friends with ") + 17:]
+        if findNameInList(friendsList, hisName) == -1: #if hisName isn't in list, adds it and then adds hisFriend to it (as a friend).
+            friendsList.append([hisName])
+            friendsList[findNameInList(friendsList, hisName)].append(hisFriend)
+        else: #if hisName is in the list, simply adds hisFriend to it.
+            friendsList[findNameInList(friendsList, hisName)].append(hisFriend)
+        if findNameInList(friendsList, hisFriend) == -1: #if hisName isn't in the list, adds it and adds the hisFriend to it (as a friend).
+            friendsList.append([hisFriend])
+            friendsList[findNameInList(friendsList, hisFriend)].append(hisName)
+        else: #if hisFriend is in the list, simply adds hisName to it.
+            friendsList[findNameInList(friendsList, hisFriend)].append(hisName)
+    return(friendsList) # returns list of list
 
 def getArgs():
     if (len(sys.argv) < 2):
         sys.exit(84)
     elif (len(sys.argv) == 2 and sys.argv[1] == "-h"):
-        printUsage()
+        tools.printUsage()
+        sys.exit(0)
     else:
         if os.path.isfile(sys.argv[1]):
             fd = open(sys.argv[1], "r")
-            return(storeFileContent(fd))
+            return(fd) # returns the entire file
         else:
             sys.exit(84)
 
-getArgs()
+def sortList(friendsList, j): # Selection sort algo
+    index = j
+    for i in range(j, len(friendsList)):
+        if friendsList[i][0] < friendsList[index][0]:
+            index = i
+    friendsList[index], friendsList[j] = friendsList[j], friendsList[index]
+    if j < len(friendsList) - 1:
+        sortList(friendsList, j + 1)
+    else:
+        return
+        
+        
+
+friendsList = storeFileContent(getArgs())
+
+sortList(friendsList, 0)
+
+for i in friendsList:
+    print(i)
