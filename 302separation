@@ -6,9 +6,28 @@ import os
 def printUsage():
     print("USAGE...")
 
+def findNameInList(friendsList, name):
+    for i in range(len(friendsList)):
+        if friendsList[i][0] == name:
+            return (i)
+    return (-1)
+
 def storeFileContent(fd):
+    friendsList = []
+    fd = map(lambda s: s.strip(), fd)
     for line in fd:
-        print(line, end="")
+        name1 = line[:line.index(" is friends with ")]
+        name2 = line[line.index(" is friends with ") + 17:]
+        if findNameInList(friendsList, name1) == -1: #if name1 isn't in list, adds it and then adds name2 to it (as a friend).
+            friendsList.append([name1])
+            friendsList[findNameInList(friendsList, name1)].append(name2)
+        else: #if name1 is in the list, simply adds name2 to it.
+            friendsList[findNameInList(friendsList, name1)].append(name2)
+        if findNameInList(friendsList, name2) == -1: #if name1 isn't in the list, adds it and adds the name2 to it (as a friend).
+            friendsList.append([name2])
+            friendsList[findNameInList(friendsList, name2)].append(name1)
+        else: #if name2 is in the list, simply adds name1 to it.
+            friendsList[findNameInList(friendsList, name2)].append(name1)
 
 def getArgs():
     if (len(sys.argv) < 2):
@@ -16,7 +35,7 @@ def getArgs():
     elif (len(sys.argv) == 2 and sys.argv[1] == "-h"):
         printUsage()
     else:
-        if (os.path.isfile(sys.argv[1])):
+        if os.path.isfile(sys.argv[1]):
             fd = open(sys.argv[1], "r")
             return(storeFileContent(fd))
         else:
