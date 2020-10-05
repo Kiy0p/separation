@@ -5,11 +5,20 @@ import os
 
 import tools
 
-def findNameInList(friendsList, name):
-    for i in range(len(friendsList)):
-        if friendsList[i][0] == name:
-            return (i)
-    return (-1)
+######################### STEP 3 : sortes the list of list alphabeticly ######################### 
+
+def sortList(friendsList, j): # Selection sort algo
+    index = j
+    for i in range(j, len(friendsList)):
+        if friendsList[i][0] < friendsList[index][0]:
+            index = i
+    friendsList[index], friendsList[j] = friendsList[j], friendsList[index]
+    if j < len(friendsList) - 1:
+        sortList(friendsList, j + 1)
+    else:
+        return
+
+######################### STEP 2 : stores friends list in a list of list ######################### 
 
 def storeFileContent(fd):
     friendsList = []
@@ -17,17 +26,19 @@ def storeFileContent(fd):
     for line in fd: # purpose of the loop : Kyle is friend with Tom -> [[Kyle, Tom], [Tom, Kyle]...]
         hisName = line[:line.index(" is friends with ")]
         hisFriend = line[line.index(" is friends with ") + 17:]
-        if findNameInList(friendsList, hisName) == -1: #if hisName isn't in list, adds it and then adds hisFriend to it (as a friend).
+        if tools.findNameInList(friendsList, hisName) == -1: #if hisName isn't in list, adds it and then adds hisFriend to it (as a friend).
             friendsList.append([hisName])
-            friendsList[findNameInList(friendsList, hisName)].append(hisFriend)
+            friendsList[tools.findNameInList(friendsList, hisName)].append(hisFriend)
         else: #if hisName is in the list, simply adds hisFriend to it.
-            friendsList[findNameInList(friendsList, hisName)].append(hisFriend)
-        if findNameInList(friendsList, hisFriend) == -1: #if hisName isn't in the list, adds it and adds the hisFriend to it (as a friend).
+            friendsList[tools.findNameInList(friendsList, hisName)].append(hisFriend)
+        if tools.findNameInList(friendsList, hisFriend) == -1: #if hisName isn't in the list, adds it and adds the hisFriend to it (as a friend).
             friendsList.append([hisFriend])
-            friendsList[findNameInList(friendsList, hisFriend)].append(hisName)
+            friendsList[tools.findNameInList(friendsList, hisFriend)].append(hisName)
         else: #if hisFriend is in the list, simply adds hisName to it.
-            friendsList[findNameInList(friendsList, hisFriend)].append(hisName)
+            friendsList[tools.findNameInList(friendsList, hisFriend)].append(hisName)
     return(friendsList) # returns list of list
+
+######################### STEP 1 : gets the arguments, checks for errors and returns file content ######################### 
 
 def getArgs():
     if (len(sys.argv) < 2):
@@ -42,22 +53,16 @@ def getArgs():
         else:
             sys.exit(84)
 
-def sortList(friendsList, j): # Selection sort algo
-    index = j
-    for i in range(j, len(friendsList)):
-        if friendsList[i][0] < friendsList[index][0]:
-            index = i
-    friendsList[index], friendsList[j] = friendsList[j], friendsList[index]
-    if j < len(friendsList) - 1:
-        sortList(friendsList, j + 1)
-    else:
-        return
-        
-        
+######################### STEP 0 : main ######################### 
 
-friendsList = storeFileContent(getArgs())
+def main():
+    sys.setrecursionlimit(5000)
 
-sortList(friendsList, 0)
+    friendsList = storeFileContent(getArgs())
+    sortList(friendsList, 0)
+    if len(sys.argv) == 4:
+        tools.printResultOne(friendsList)
+    elif len(sys.argv) == 3 and sys.argv[2].isnumeric:
+        tools.printResultTwo(friendsList)
 
-for i in friendsList:
-    print(i)
+main()
