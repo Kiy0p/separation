@@ -20,7 +20,6 @@ DESCRIPTION
     file    file that contains the list of Facebook connections
     n       maximum length of the paths
     pi      name of someone in thes file""")
-    sys.exit(0)
 
 
 
@@ -43,9 +42,11 @@ def printMatrix(friendsList, maxConnexions):
     for i in friendsList:
         for j in friendsList:
             if algo.nbrOfSeparation(friendsList, i[0], j[0]) <= maxConnexions:
-                print(algo.nbrOfSeparation(friendsList, i[0], j[0]), "", end="")
+                print(algo.nbrOfSeparation(friendsList, i[0], j[0]), end="")
             else:
-                print(0, "", end="")
+                print(0, end="")
+            if (j[0] != friendsList[len(friendsList) - 1][0]): # print white spaces between the numbers
+                print(" ", end="")
         print("")
 
 def printResultTwo(friendsList):

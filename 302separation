@@ -41,7 +41,8 @@ def storeFileContent(fd):
 ######################### STEP 1 : gets the arguments, checks for errors and returns file content ######################### 
 
 def getArgs():
-    if (len(sys.argv) < 2):
+    if (len(sys.argv) < 3 or len(sys.argv) > 4):
+        tools.printUsage()
         sys.exit(84)
     elif (len(sys.argv) == 2 and sys.argv[1] == "-h"):
         tools.printUsage()
