@@ -6,15 +6,18 @@ Epitech third year math project
 
 USAGE
     ./302separation file [n | p1 p2]
+
 DESCRIPTION
-    file    file that contains the list of Facebook connections
-    n       maximum length of the paths
+    file    file that contains the list of Facebook connections | 
+    n       maximum length of the paths | 
     p1/p2   name of someone in the file
 
 ---------------------------------------------------------------------
 
 To test the program:
+
 ./302separation example 3
+
 ./302separation example 'Cindy Crawford' 'Yvette Horner'
 
 ---------------------------------------------------------------------
