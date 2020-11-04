@@ -23,7 +23,7 @@ def deleteDuplicate(listNames, friendsList, name1):
 
 ######################### STEP 1 : checks is name1 and name2 are friends ######################### 
 
-def findCommonFriend(friendsList, name1, name2):
+def findCommonFriend(friendsList, name1, name2): # with 2 names and the friends list, checks wether they are fiend or not.
     index1 = tools.findNameInList(friendsList, name1)
     
     for friend in friendsList[index1]:
